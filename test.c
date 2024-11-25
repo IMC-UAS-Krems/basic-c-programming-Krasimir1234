@@ -7,6 +7,7 @@
 #define NCOLS 10
 
 int main(int argc, char *argv[]) {
+    // testing ./assignment NROWS NCOLS
     FILE *f;
     char line[256];
     char *token;
@@ -18,11 +19,14 @@ int main(int argc, char *argv[]) {
     }
 
     int nrows = 0, ncols = 0;
+    // Read the file line by line
     while (fgets(line, sizeof(line), f) != NULL) {
+        // Remove the newline character at the end of the line (if present)
         line[strcspn(line, "\n")] = 0;
 
         nrows++;
 
+        // Tokenize the line using whitespace as the separator
         ncols = 0;
         token = strtok(line, " \t");
         while (token != NULL) {

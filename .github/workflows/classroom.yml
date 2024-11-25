@@ -13,7 +13,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
     - name: Matrix output test
       id: matrix-output-test
       uses: classroom-resources/autograding-command-grader@v1
@@ -23,64 +22,35 @@ jobs:
         command: make test
         timeout: 10
         max-score: 2
-
-    - name: Debug Matrix Output Test
-      run: |
-        echo "Running: make test"
-        make test
-        echo "Exit Code: $?"
-
     - name: No args test
       id: no-args-test
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: No args test
         setup-command: chmod +x checkargs.sh
-        command: ./checkargs.sh "./assignment" "Incorrect usage. You provided 0 arguments. The correct number of arguments is 2"
+        command: ./checkargs.sh "./assignment" "Incorrect usage. You provided 0 arguments.
+          The correct number of arguments is 2"
         timeout: 10
         max-score: 1
-
-    - name: Debug No Args Test
-      run: |
-        echo "Running ./assignment with no arguments"
-        ./assignment || echo "Exit Code: $?"
-
     - name: One arg test
       id: one-arg-test
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: One arg test
         setup-command: chmod +x checkargs.sh
-        command: ./checkargs.sh "./assignment 1" "Incorrect usage. You provided 1 arguments. The correct number of arguments is 2"
+        command: ./checkargs.sh "./assignment 1" "Incorrect usage. You provided 1
+          arguments. The correct number of arguments is 2"
         timeout: 10
         max-score: 1
-
-    - name: Debug One Arg Test
-      run: |
-        echo "Running ./assignment with one argument"
-        ./assignment 1 || echo "Exit Code: $?"
-
     - name: Three args test
       id: three-args-test
       uses: classroom-resources/autograding-command-grader@v1
       with:
         test-name: Three args test
         setup-command: chmod +x checkargs.sh
-        command: ./checkargs.sh "./assignment 1 2 3" "Incorrect usage. You provided 3 arguments. The correct number of arguments is 2"
+        command: ./checkargs.sh "./assignment 1 2 3" "Incorrect usage. You provided
+          3 arguments. The correct number of arguments is 2"
         timeout: 10
-
-    - name: Debug Three Args Test
-      run: |
-        echo "Running ./assignment with three arguments"
-        ./assignment 1 2 3 || echo "Exit Code: $?"
-
-    - name: Debug Valid Args Test
-      run: |
-        echo "Running ./assignment with valid arguments"
-        ./assignment 5 10 || echo "Exit Code: $?"
-        echo "Contents of matrix.txt:"
-        cat matrix.txt || echo "matrix.txt not found"
-
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
       env:
