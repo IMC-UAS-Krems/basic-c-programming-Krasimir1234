@@ -15,19 +15,13 @@ int is_positive_integer(const char *str) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc == 1) {
-        printf("Incorrect usage. You provided 0 arguments. The correct number of arguments is 2\n");
-        return 1;
-    } else if (argc == 2) {
-        printf("Incorrect usage. You provided 1 arguments. The correct number of arguments is 2\n");
-        return 1;
-    } else if (argc > 3) {
-        printf("Incorrect usage. You provided 3 arguments. The correct number of arguments is 2\n");
+    if (argc != 3) {
+        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
         return 1;
     }
 
     if (!is_positive_integer(argv[1]) || !is_positive_integer(argv[2])) {
-        printf("Incorrect usage. The parameters you provided are not positive integers\n");
+        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
         return 1;
     }
 
@@ -35,7 +29,7 @@ int main(int argc, char *argv[]) {
     int cols = atoi(argv[2]);
 
     if (rows <= 0 || cols <= 0) {
-        printf("Incorrect usage. Dimensions must be positive integers\n");
+        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
         return 1;
     }
 
