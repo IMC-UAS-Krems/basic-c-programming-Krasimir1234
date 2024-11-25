@@ -1,82 +1,94 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
+#include <stdio.h> // for input and output operations
+#include <fcntl.h> // file control operations (not used)
+#include <string.h> // string manipulation functions
+#include <time.h> // for seeding the random number generator with current time
+#include <stdlib.h> // for memory allocation
 
+
+// function to check if a string is a positive integer
 int is_positive_integer(const char *str) {
-    if (!str || *str == '\0') return 0;
-    while (*str) {
-        if (*str < '0' || *str > '9') {
-            return 0;
-        }
-        str++;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (!isdigit(str[i])) return 0; 
     }
-    return 1;
+    return atoi(str) > 0; // convert the str to int and if its more than 0
 }
 
 int main(int argc, char *argv[]) {
+    // seed random number generator witht the current time to generate random numbers
+    srand(time(NULL));
+    int minrand = 1; // the min number we can get
+    int maxrand = 100; // the max num we can get
+
+    // check if the number of arguments is correct
     if (argc != 3) {
         printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
-        return 1;
+        return 1; // exit with an error
     }
 
+    // check if both arguments are positive integers
     if (!is_positive_integer(argv[1]) || !is_positive_integer(argv[2])) {
         printf("Incorrect usage. The parameters you provided are not positive integers\n");
-        return 1;
+        return 1; // exit with an error
     }
 
-    int rows = atoi(argv[1]);
+    // convert arguments to integers
+    int rows = atoi(argv[1]); 
     int cols = atoi(argv[2]);
 
-    if (rows <= 0 || cols <= 0) {
-        printf("Incorrect usage. Dimensions must be positive integers\n");
-        return 1;
+    // dynamically allocate memory for the matrix
+    int **matrix = malloc(rows * sizeof(int *)); 
+    if (!matrix) { // check if memory allocation failed
+        fprintf(stderr, "Memory allocation failed\n");
+        return 1; // exit with an error code
     }
 
-    int **matrix = malloc(rows * sizeof(int *));
-    if (!matrix) {
-        perror("Failed to allocate memory for rows");
-        return 1;
-    }
+    // allocate memory for each row of the metrix
+    for (int i = 0; i < rows; i++) { 
+        matrix[i] = malloc(cols * sizeof(int)); // allocate memory for the columns in each row
+        if (!matrix[i]) { // check if allocation failed
+            fprintf(stderr, "Memory allocation failed\n");
 
-    for (int i = 0; i < rows; i++) {
-        matrix[i] = malloc(cols * sizeof(int));
-        if (!matrix[i]) {
-            perror("Failed to allocate memory for columns");
-            for (int j = 0; j < i; j++) free(matrix[j]);
-            free(matrix);
-            return 1;
+            // VERY IMPORTNAT TO CLEAN UP!!!!!
+            for (int j = 0; j < i; j++) free(matrix[j]); // free previously allocated rows
+            free(matrix); // free the row pointer array
+            return 1; // exit with an error code
         }
     }
 
-    srand(time(NULL));
+    // fill the matrix with random integers between 1 and 100
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            matrix[i][j] = rand() % 100 + 1;
+            matrix[i][j] = minrand + rand() % (maxrand - minrand + 1); // random number generation
         }
     }
 
+    // write the matrix to "matrix.txt"
     FILE *file = fopen("matrix.txt", "w");
-    if (!file) {
-        perror("Failed to create matrix.txt");
+    if (!file) { // check if the file could not be created
+        fprintf(stderr, "Failed to create file\n");
+        
+        // Free all allocated memory
         for (int i = 0; i < rows; i++) free(matrix[i]);
         free(matrix);
-        return 1;
+        return 1;// exit wiht an error
     }
 
+    // write the matrix to the file, row by row
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            fprintf(file, "%d", matrix[i][j]);
-            if (j < cols - 1) fprintf(file, " ");
+            fprintf(file, "%d", matrix[i][j]); // write the current value
+            if (j < cols - 1) fprintf(file, " "); // add space between numbers, but not after the last column
         }
-        fprintf(file, "\n");
+        fprintf(file, "\n");// move to the next line after each row
     }
 
-    fclose(file);
+    fclose(file); // close the file after writing
 
-    for (int i = 0; i < rows; i++) free(matrix[i]);
-    free(matrix);
+    // free dynamically allocated memory!!!!!!
+    for (int i = 0; i < rows; i++) {
+        free(matrix[i]);
+    }
+    free(matrix); // free the row pointer array
 
-    printf("Matrix successfully written to matrix.txt\n");
-    return 0;
+    return 0; // exit successfully
 }
