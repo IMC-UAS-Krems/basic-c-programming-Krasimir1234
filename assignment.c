@@ -3,9 +3,8 @@
 #include <string.h>
 #include <time.h>
 
-
 int is_positive_integer(const char *str) {
-    if (!str || *str == '\0') return 0; 
+    if (!str || *str == '\0') return 0;
     while (*str) {
         if (*str < '0' || *str > '9') {
             return 0;
@@ -16,7 +15,6 @@ int is_positive_integer(const char *str) {
 }
 
 int main(int argc, char *argv[]) {
- 
     if (argc != 3) {
         printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
         return 1;
@@ -35,12 +33,12 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-
     int **matrix = malloc(rows * sizeof(int *));
     if (!matrix) {
         perror("Failed to allocate memory for rows");
         return 1;
     }
+
     for (int i = 0; i < rows; i++) {
         matrix[i] = malloc(cols * sizeof(int));
         if (!matrix[i]) {
@@ -51,11 +49,10 @@ int main(int argc, char *argv[]) {
         }
     }
 
-
     srand(time(NULL));
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
-            matrix[i][j] = rand() % 100 + 1; 
+            matrix[i][j] = rand() % 100 + 1;
         }
     }
 
@@ -66,13 +63,15 @@ int main(int argc, char *argv[]) {
         free(matrix);
         return 1;
     }
+
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             fprintf(file, "%d", matrix[i][j]);
-            if (j < cols - 1) fprintf(file, " "); 
+            if (j < cols - 1) fprintf(file, " ");
         }
-        fprintf(file, "\n"); 
+        fprintf(file, "\n");
     }
+
     fclose(file);
 
     for (int i = 0; i < rows; i++) free(matrix[i]);
