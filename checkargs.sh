@@ -1,15 +1,22 @@
 #!/bin/bash
 
-# Capture the command and expected output
-program=$1
-expected_output=$2
+# Debugging: Print inputs
+echo "Running checkargs.sh"
+echo "Expected output: $2"
 
-# Run the program and capture its output
-output=$($program)
+# Capture program output
+PROGRAM_OUTPUT=$($1 2>&1)
 
-# Compare the output with the expected string
-if [ "$output" == "$expected_output" ]; then
-  exit 0
+# Debugging: Print the actual program output
+echo "Program output: $PROGRAM_OUTPUT"
+
+# Compare outputs
+if [ "$PROGRAM_OUTPUT" == "$2" ]; then
+    echo "Test passed"
+    exit 0
 else
-  exit 1
+    echo "Test failed"
+    echo "Expected: $2"
+    echo "Got: $PROGRAM_OUTPUT"
+    exit 1
 fi
