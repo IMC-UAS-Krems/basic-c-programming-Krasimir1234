@@ -1,25 +1,25 @@
-# Define the compiler
+# Compiler and flags
 CC = gcc
-
-# Define the compiler flags
 CFLAGS = -Wall -Wextra -O2
 
-# Define the target executable name
-TARGET = assignment
+# Targets
+ASSIGNMENT = assignment
+TEST = test
 
-# Define the source files
-SRC = assignment.c
+# Source files
+ASSIGNMENT_SRC = assignment.c
+TEST_SRC = test.c
 
-# Rule to build the target executable
-$(TARGET): $(SRC)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
+# Build assignment executable
+$(ASSIGNMENT): $(ASSIGNMENT_SRC)
+	$(CC) $(CFLAGS) -o $(ASSIGNMENT) $(ASSIGNMENT_SRC)
 
-test: $(TARGET) test.c
-	$(CC) $(CFLAGS) -o test test.c
-	./$(TARGET) 5 10
-	./test
+# Build and run test
+test: $(ASSIGNMENT) $(TEST_SRC)
+	$(CC) $(CFLAGS) -o $(TEST) $(TEST_SRC)
+	./$(ASSIGNMENT) 5 10
+	./$(TEST)
 
-# Rule to clean up the build files
+# Clean up
 clean:
-	rm -f $(TARGET) test
-
+	rm -f $(ASSIGNMENT) $(TEST) matrix.txt
