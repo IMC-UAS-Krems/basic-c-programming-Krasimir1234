@@ -16,12 +16,12 @@ int is_positive_integer(const char *str) {
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
-        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
+        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2", argc - 1);
         return 1;
     }
 
     if (!is_positive_integer(argv[1]) || !is_positive_integer(argv[2])) {
-        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
+        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2", argc - 1);
         return 1;
     }
 
@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     int cols = atoi(argv[2]);
 
     if (rows <= 0 || cols <= 0) {
-        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
+        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2", argc - 1);
         return 1;
     }
 
@@ -77,6 +77,6 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < rows; i++) free(matrix[i]);
     free(matrix);
 
-    printf("Matrix successfully written to matrix.txt\n");
+    printf("Matrix successfully written to matrix.txt");
     return 0;
 }
