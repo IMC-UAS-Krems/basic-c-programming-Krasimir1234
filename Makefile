@@ -1,25 +1,29 @@
-# Compiler and flags
+# Define the compiler
 CC = gcc
+
+# Define the compiler flags
 CFLAGS = -Wall -Wextra -O2
 
-# Targets
-ASSIGNMENT = assignment
-TEST = test
+# Define the target executable name
+TARGET = assignment
 
-# Source files
-ASSIGNMENT_SRC = assignment.c
-TEST_SRC = test.c
+# Define the source files
+SRC = assignment.c
 
-# Build assignment executable
-$(ASSIGNMENT): $(ASSIGNMENT_SRC)
-	$(CC) $(CFLAGS) -o $(ASSIGNMENT) $(ASSIGNMENT_SRC)
+# Rule to build the target executable
+$(TARGET): $(SRC)
+	$(CC) $(CFLAGS) -o $(TARGET) $(SRC)
 
-# Build and run test
-test: $(ASSIGNMENT) $(TEST_SRC)
-	$(CC) $(CFLAGS) -o $(TEST) $(TEST_SRC)
-	./$(ASSIGNMENT) 5 10
-	./$(TEST)
+test: $(TARGET) test.c
+	$(CC) $(CFLAGS) -o test test.c
+	./$(TARGET) 5 10
+	./test
 
-# Clean up
+# Rule to clean up the build files
 clean:
+<<<<<<< HEAD
 	rm -f $(ASSIGNMENT) $(TEST) matrix.txt
+=======
+	rm -f $(TARGET) test
+
+>>>>>>> parent of 219beff (test)
