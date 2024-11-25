@@ -15,8 +15,14 @@ int is_positive_integer(const char *str) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
-        printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
+    if (argc == 1) {
+        printf("Incorrect usage. You provided 0 arguments. The correct number of arguments is 2\n");
+        return 1;
+    } else if (argc == 2) {
+        printf("Incorrect usage. You provided 1 arguments. The correct number of arguments is 2\n");
+        return 1;
+    } else if (argc > 3) {
+        printf("Incorrect usage. You provided 3 arguments. The correct number of arguments is 2\n");
         return 1;
     }
 
