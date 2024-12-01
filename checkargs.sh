@@ -4,7 +4,6 @@
 program=$1
 expected_output=$2
 
-# Ensure the program has execute permissions
 if [ ! -x $program ]; then
   chmod +x $program
 fi
