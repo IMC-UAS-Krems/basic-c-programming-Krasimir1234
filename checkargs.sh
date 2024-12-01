@@ -4,6 +4,11 @@
 program=$1
 expected_output=$2
 
+# Ensure the program has execute permissions
+if [ ! -x $program ]; then
+  chmod +x $program
+fi
+
 # Run the program and capture its output
 output=$($program)
 
@@ -11,5 +16,7 @@ output=$($program)
 if [ "$output" == "$expected_output" ]; then
   exit 0
 else
+  echo "Expected: $expected_output"
+  echo "Actual: $output"
   exit 1
 fi

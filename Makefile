@@ -13,10 +13,12 @@ TEST_SRC = test.c
 # Build assignment executable
 $(ASSIGNMENT): $(ASSIGNMENT_SRC)
 	$(CC) $(CFLAGS) -o $(ASSIGNMENT) $(ASSIGNMENT_SRC)
+	chmod +x $(ASSIGNMENT)
 
 # Build and run test
 test: $(ASSIGNMENT) $(TEST_SRC)
 	$(CC) $(CFLAGS) -o $(TEST) $(TEST_SRC)
+	chmod +x $(TEST)
 	./$(ASSIGNMENT) 5 10
 	./$(TEST)
 
