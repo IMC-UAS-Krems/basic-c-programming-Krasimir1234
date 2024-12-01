@@ -2,90 +2,89 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <ctype.h>
 
 int is_positive_integer(const char *str) {
-    if (str == NULL || *str == '\0') {
-        return 0;
+    int len = strlen(str);
+    int i = 0;
+    while (i < len) {
+        if (!isdigit(str[i])) return 0;
+        i++;
     }
-    for (int i = 0; str[i] != '\0'; i++) {
-        if (str[i] < '0' || str[i] > '9') {
-            return 0;
+    return atoi(str) > 0;
+}
+
+void allocate_matrix(int ***matrix, int rows, int cols) {
+    *matrix = (int **)calloc(rows, sizeof(int *));
+    int i = 0;
+    while (i < rows) {
+        (*matrix)[i] = (int *)calloc(cols, sizeof(int));
+        i++;
+    }
+}
+
+void initialize_matrix(int **matrix, int rows, int cols) {
+    srand(time(NULL));
+    int i = 0;
+    while (i < rows) {
+        int j = 0;
+        while (j < cols) {
+            matrix[i][j] = rand() % 100 + 1;
+            j++;
         }
+        i++;
     }
-    return 1;
+}
+
+void write_matrix_to_file(const char *filename, int **matrix, int rows, int cols) {
+    FILE *file = fopen(filename, "w");
+    if (!file) {
+        perror("Failed to create file");
+        exit(EXIT_FAILURE);
+    }
+    int i = 0;
+    while (i < rows) {
+        int j = 0;
+        while (j < cols) {
+            fprintf(file, "%d", matrix[i][j]);
+            if (j < cols - 1) fprintf(file, " ");
+            j++;
+        }
+        fprintf(file, "\n");
+        i++;
+    }
+    fclose(file);
+}
+
+void free_matrix(int **matrix, int rows) {
+    int i = 0;
+    do {
+        free(matrix[i]);
+        i++;
+    } while (i < rows);
+    free(matrix);
 }
 
 int main(int argc, char *argv[]) {
     if (argc != 3) {
         printf("Incorrect usage. You provided %d arguments. The correct number of arguments is 2\n", argc - 1);
-        return 1;
+        return EXIT_FAILURE;
     }
 
     if (!is_positive_integer(argv[1]) || !is_positive_integer(argv[2])) {
         printf("Incorrect usage. The parameters you provided are not positive integers\n");
-        return 1;
+        return EXIT_FAILURE;
     }
 
     int rows = atoi(argv[1]);
     int cols = atoi(argv[2]);
 
-    if (rows != 5 || cols != 10) {
-        printf("Incorrect usage. Expected dimensions are 5 rows and 10 columns\n");
-        return 1;
-    }
+    int **matrix;
+    allocate_matrix(&matrix, rows, cols);
+    initialize_matrix(matrix, rows, cols);
+    write_matrix_to_file("matrix.txt", matrix, rows, cols);
+    free_matrix(matrix, rows);
 
-    int **matrix = (int **)malloc(rows * sizeof(int *));
-    if (matrix == NULL) {
-        printf("Failed to allocate memory for rows\n");
-        return 1;
-    }
-
-    for (int i = 0; i < rows; i++) {
-        matrix[i] = (int *)malloc(cols * sizeof(int));
-        if (matrix[i] == NULL) {
-            printf("Failed to allocate memory for columns\n");
-            for (int j = 0; j < i; j++) {
-                free(matrix[j]);
-            }
-            free(matrix);
-            return 1;
-        }
-    }
-
-    srand(time(NULL));
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            matrix[i][j] = rand() % 100 + 1;
-        }
-    }
-
-    FILE *file = fopen("matrix.txt", "w");
-    if (file == NULL) {
-        printf("Failed to create matrix.txt\n");
-        for (int i = 0; i < rows; i++) {
-            free(matrix[i]);
-        }
-        free(matrix);
-        return 1;
-    }
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            fprintf(file, "%d", matrix[i][j]);
-            if (j < cols - 1) {
-                fprintf(file, " ");
-            }
-        }
-        fprintf(file, "\n");
-    }
-
-    fclose(file);
-
-    for (int i = 0; i < rows; i++) {
-        free(matrix[i]);
-    }
-    free(matrix);
-
-    printf("Matrix successfully written to matrix.txt\n");
-    return 0;
+    printf("Matrix generated and saved to matrix.txt\n");
+    return EXIT_SUCCESS;
 }
